@@ -1,5 +1,5 @@
 ﻿using System;
-using Board;
+using Chessboard;
 
 namespace Chess
 {
@@ -12,6 +12,8 @@ namespace Chess
             p = new Position(3, 4);
 
             Console.WriteLine("Position: " + p);
+
+            Board board = new Board(8, 8);
 
         }
     }
