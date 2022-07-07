@@ -2,6 +2,7 @@
 
 using Chessboard;
 using Chessboard.Enums;
+using Chessboard.Exceptions;
 using Game;
 
 namespace Chess
@@ -10,16 +11,24 @@ namespace Chess
     {
         static void Main(string[] args)
         {
-            Board board = new Board(8, 8);
+            try
+            {
+                Board board = new Board(8, 8);
 
-            board.PutPiece(new Rook(board, Color.Black), new Position(0, 0));
-            board.PutPiece(new Rook(board, Color.Black), new Position(1, 3));
-            board.PutPiece(new King(board, Color.Black), new Position(2, 4));
+                board.PutPiece(new Rook(board, Color.Black), new Position(0, 0));
+                board.PutPiece(new Rook(board, Color.Black), new Position(1, 3));
+                board.PutPiece(new King(board, Color.Black), new Position(0, 2));
 
-            Screen.PrintBoard(board);
+                Screen.PrintBoard(board);
+
+            }
+            catch (BoardException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
 
             Console.WriteLine();
-
         }
     }
 }
