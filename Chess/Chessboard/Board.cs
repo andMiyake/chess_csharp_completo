@@ -6,18 +6,23 @@ namespace Chessboard
     {
         public int Rows { get; set; }
         public int Columns { get; set; }
-        public Piece[,] Pieces { get; private set; }
+        private Piece[,] pieces;
 
         public Board(int rows, int columns)
         {
             Rows = rows;
             Columns = columns;
-            Pieces = new Piece[rows, columns];
+            pieces = new Piece[rows, columns];
         }
 
-        public Piece FindPieceByPosition(Position position)
+        public Piece GetPieceByPosition(int row, int column)
         {
-            return Pieces[position.Row, position.Column];
+            return pieces[row, column];
+        }
+
+        public Piece GetPieceByPosition(Position position)
+        {
+            return pieces[position.Row, position.Column];
         }
 
         public void PutPiece(Piece piece, Position position)
@@ -26,14 +31,26 @@ namespace Chessboard
             {
                 throw new BoardException("There's already a piece in this position.");
             }
-            Pieces[position.Row, position.Column] = piece;
+            pieces[position.Row, position.Column] = piece;
             piece.Position = position;
+        }
+
+        public Piece RemovePiece(Position position)
+        {
+            if (GetPieceByPosition(position) == null)
+            {
+                return null;
+            }
+            Piece aux = GetPieceByPosition(position);
+            aux.Position = null;
+            pieces[position.Row, position.Column] = null;
+            return aux;
         }
 
         public bool PieceExists(Position position)
         {
             ValidatePosition(position);
-            return FindPieceByPosition(position) != null;
+            return GetPieceByPosition(position) != null;
         }
 
         public bool ValidPosition(Position position)

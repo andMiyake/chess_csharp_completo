@@ -1,6 +1,7 @@
 ﻿using System;
 using Chessboard;
 using Chessboard.Enums;
+using Game;
 
 namespace Chess
 {
@@ -8,24 +9,39 @@ namespace Chess
     {
         public static void PrintBoard(Board board)
         {
+            ConsoleColor originalColor = Console.ForegroundColor;
+
             for (int i = 0; i < board.Rows; i++)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write(8 - i + " ");
+                Console.ForegroundColor = originalColor;
+
                 for (int j = 0; j < board.Columns; j++)
                 {
-                    if (board.Pieces[i, j] == null)
+                    if (board.GetPieceByPosition(i, j) == null)
                     {
                         Console.Write("- ");
                     }
                     else
                     {
-                        PrintPiece(board.Pieces[i, j]);
+                        PrintPiece(board.GetPieceByPosition(i, j));
                         Console.Write(" ");
                     }
                 }
                 Console.WriteLine();
             }
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("  a b c d e f g h");
+            Console.ForegroundColor = originalColor;
+        }
+
+        public static ChessPosition ReadChessPosition()
+        {
+            string s = Console.ReadLine();
+            char column = s[0];
+            int row = int.Parse(s[1] + "");
+            return new ChessPosition(column, row);
         }
 
         public static void PrintPiece(Piece piece)
