@@ -22,5 +22,7 @@ namespace Chessboard
         {
             MovementQty++;
         }
+
+        public abstract bool[,] PossibleMovements();
     }
 }
