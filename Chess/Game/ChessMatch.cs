@@ -1,14 +1,15 @@
 ﻿using System;
 using Chessboard;
 using Chessboard.Enums;
+using Chessboard.Exceptions;
 
 namespace Game
 {
     internal class ChessMatch
     {
         public Board Board { get; private set; }
-        private int turn;
-        private Color currentPlayer;
+        public int turn { get; private set; }
+        public Color currentPlayer { get; private set; }
         public bool Finished { get; private set; }
 
         public ChessMatch()
@@ -26,6 +27,49 @@ namespace Game
             p.IncreaseMovementQty();
             Piece capturedPiece = Board.RemovePiece(destination);
             Board.PutPiece(p, destination);
+        }
+
+        public void MakePlay(Position origin, Position destination)
+        {
+            MakeMoviment(origin, destination);
+            turn++;
+            ChangePlayer();
+        }
+
+        public void ValidateOriginPosition(Position pos)
+        {
+            if (Board.GetPieceByPosition(pos) == null)
+            {
+                throw new BoardException("There's no piece in the chosen origin position!");
+            }
+            if (currentPlayer != Board.GetPieceByPosition(pos).Color)
+            {
+                throw new BoardException("The chosen origin piece isn't yours!");
+            }
+            if (!Board.GetPieceByPosition(pos).PossibleMovementExists())
+            {
+                throw new BoardException("There are no moves possible for the chosen origin piece!");
+            }
+        }
+
+        public void ValidateDestinationPosition(Position origin, Position destination)
+        {
+            if (!Board.GetPieceByPosition(origin).CanMoveTo(destination))
+            {
+                throw new BoardException("Invalid destination position!");
+            }
+        }
+
+        private void ChangePlayer()
+        {
+            if (currentPlayer == Color.White)
+            {
+                currentPlayer = Color.Black;
+            }
+            else
+            {
+                currentPlayer = Color.White;
+            }
         }
 
         private void PlacePieces()
