@@ -20,10 +20,7 @@ namespace Chess
                     try
                     {
                         Console.Clear();
-                        Screen.PrintBoard(match.Board);
-                        Console.WriteLine();
-                        Console.WriteLine("Turn: " + match.turn);
-                        Console.WriteLine("Waiting move: " + match.currentPlayer);
+                        Screen.PrintMatch(match);
 
                         Console.WriteLine();
                         Console.Write("Origin: ");
