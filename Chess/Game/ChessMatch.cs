@@ -111,7 +111,7 @@ namespace Game
 
         public void ValidateDestinationPosition(Position origin, Position destination)
         {
-            if (!Board.GetPieceByPosition(origin).CanMoveTo(destination))
+            if (!Board.GetPieceByPosition(origin).PossibleMovement(destination))
             {
                 throw new BoardException("Invalid destination position!");
             }
