@@ -3,21 +3,21 @@ using Chessboard.Enums;
 
 namespace Game
 {
-    internal class Rook : Piece
+    internal class Bishop : Piece
     {
-        public Rook(Board board, Color color) : base(board, color)
+        public Bishop(Board board, Color color) : base(board, color)
         {
         }
 
         public override string ToString()
         {
-            return "R";
+            return "B";
         }
 
-        private bool CanMove(Position position)
+        private bool CanMove(Position pos)
         {
-            Piece p = Board.GetPieceByPosition(position);
-            return p == null || p.Color != Color;           // can move when the space is free or it has a piece from the opponent.
+            Piece p = Board.GetPieceByPosition(pos);
+            return p == null || p.Color != Color;
         }
 
         public override bool[,] PossibleMovements()
@@ -26,8 +26,8 @@ namespace Game
 
             Position pos = new Position(0, 0);
 
-            //Up
-            pos.SetPosition(Position.Row - 1, Position.Column);
+            //Top Left
+            pos.SetPosition(Position.Row - 1, Position.Column - 1);
             while (Board.ValidPosition(pos) && CanMove(pos))
             {
                 possibleMov[pos.Row, pos.Column] = true;
@@ -36,11 +36,11 @@ namespace Game
                 {
                     break;
                 }
-                pos.Row--;
+                pos.SetPosition(pos.Row - 1, pos.Column - 1);
             }
 
-            //Down
-            pos.SetPosition(Position.Row + 1, Position.Column);
+            //Top Right
+            pos.SetPosition(Position.Row - 1, Position.Column + 1);
             while (Board.ValidPosition(pos) && CanMove(pos))
             {
                 possibleMov[pos.Row, pos.Column] = true;
@@ -49,11 +49,11 @@ namespace Game
                 {
                     break;
                 }
-                pos.Row++;
+                pos.SetPosition(pos.Row - 1, pos.Column + 1);
             }
 
-            //Right
-            pos.SetPosition(Position.Row, Position.Column + 1);
+            //Bottom Right
+            pos.SetPosition(Position.Row + 1, Position.Column + 1);
             while (Board.ValidPosition(pos) && CanMove(pos))
             {
                 possibleMov[pos.Row, pos.Column] = true;
@@ -62,11 +62,11 @@ namespace Game
                 {
                     break;
                 }
-                pos.Column++;
+                pos.SetPosition(pos.Row + 1, pos.Column + 1);
             }
 
-            //Left
-            pos.SetPosition(Position.Row, Position.Column - 1);
+            //Bottom Left
+            pos.SetPosition(Position.Row + 1, Position.Column - 1);
             while (Board.ValidPosition(pos) && CanMove(pos))
             {
                 possibleMov[pos.Row, pos.Column] = true;
@@ -75,10 +75,12 @@ namespace Game
                 {
                     break;
                 }
-                pos.Column--;
+                pos.SetPosition(pos.Row + 1, pos.Column - 1);
             }
 
             return possibleMov;
+
         }
+
     }
 }
