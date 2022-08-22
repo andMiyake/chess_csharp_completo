@@ -38,6 +38,27 @@ namespace Game
             {
                 capturedPiecesList.Add(capturedPiece);
             }
+
+            // #specialmove Castle Kingside
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position rookOrigin = new Position(origin.Row, origin.Column + 3);
+                Position rookDestination = new Position(origin.Row, origin.Column + 1);
+                Piece Rook = Board.RemovePiece(rookOrigin);
+                Rook.IncreaseMovementQty();
+                Board.PutPiece(Rook, rookDestination);
+            }
+
+            // #specialmove Castle Queenside
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position rookOrigin = new Position(origin.Row, origin.Column - 4);
+                Position rookDestination = new Position(origin.Row, origin.Column - 1);
+                Piece Rook = Board.RemovePiece(rookOrigin);
+                Rook.IncreaseMovementQty();
+                Board.PutPiece(Rook, rookDestination);
+            }
+
             return capturedPiece;
         }
 
@@ -51,6 +72,26 @@ namespace Game
                 capturedPiecesList.Remove(capturedPiece);
             }
             Board.PutPiece(p, origin);
+
+            // #specialmove Castle Kingside
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position rookOrigin = new Position(origin.Row, origin.Column + 3);
+                Position rookDestination = new Position(origin.Row, origin.Column + 1);
+                Piece Rook = Board.RemovePiece(rookDestination);
+                Rook.DecreaseMovementQty();
+                Board.PutPiece(Rook, rookOrigin);
+            }
+
+            // #specialmove Castle Queenside
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position rookOrigin = new Position(origin.Row, origin.Column - 4);
+                Position rookDestination = new Position(origin.Row, origin.Column - 1);
+                Piece Rook = Board.RemovePiece(rookDestination);
+                Rook.DecreaseMovementQty();
+                Board.PutPiece(Rook, rookOrigin);
+            }
         }
 
         public void MakePlay(Position origin, Position destination)
@@ -269,7 +310,7 @@ namespace Game
             PlaceNewPiece('b', 1, new Knight(Board, Color.White));
             PlaceNewPiece('c', 1, new Bishop(Board, Color.White));
             PlaceNewPiece('d', 1, new Queen(Board, Color.White));
-            PlaceNewPiece('e', 1, new King(Board, Color.White));
+            PlaceNewPiece('e', 1, new King(Board, Color.White, this));
             PlaceNewPiece('f', 1, new Bishop(Board, Color.White));
             PlaceNewPiece('g', 1, new Knight(Board, Color.White));
             PlaceNewPiece('h', 1, new Rook(Board, Color.White));
@@ -286,7 +327,7 @@ namespace Game
             PlaceNewPiece('b', 8, new Knight(Board, Color.Black));
             PlaceNewPiece('c', 8, new Bishop(Board, Color.Black));
             PlaceNewPiece('d', 8, new Queen(Board, Color.Black));
-            PlaceNewPiece('e', 8, new King(Board, Color.Black));
+            PlaceNewPiece('e', 8, new King(Board, Color.Black, this));
             PlaceNewPiece('f', 8, new Bishop(Board, Color.Black));
             PlaceNewPiece('g', 8, new Knight(Board, Color.Black));
             PlaceNewPiece('h', 8, new Rook(Board, Color.Black));
