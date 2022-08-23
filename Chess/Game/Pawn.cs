@@ -1,15 +1,14 @@
 ﻿using Chessboard;
 using Chessboard.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Game
 {
     internal class Pawn : Piece
     {
-        public Pawn(Board board, Color color) : base(board, color)
+        private ChessMatch match;
+        public Pawn(Board board, Color color, ChessMatch match) : base(board, color)
         {
+            this.match = match;
         }
 
         public override string ToString()
@@ -58,6 +57,21 @@ namespace Game
                 {
                     possibleMov[pos.Row, pos.Column] = true;
                 }
+
+                // #specialmove En passant
+                if (Position.Row == 3)
+                {
+                    Position left = new Position(Position.Row, Position.Column - 1);
+                    if (Board.ValidPosition(left) && EnemyExists(left) && Board.GetPieceByPosition(left) == match.VulnerableEnPassant)
+                    {
+                        possibleMov[left.Row - 1, left.Column] = true;
+                    }
+                    Position right = new Position(Position.Row, Position.Column + 1);
+                    if (Board.ValidPosition(right) && EnemyExists(right) && Board.GetPieceByPosition(right) == match.VulnerableEnPassant)
+                    {
+                        possibleMov[right.Row - 1, right.Column] = true;
+                    }
+                }
             }
             else
             {
@@ -82,6 +96,21 @@ namespace Game
                 if (Board.ValidPosition(pos) && EnemyExists(pos))
                 {
                     possibleMov[pos.Row, pos.Column] = true;
+                }
+
+                // #specialmove En passant
+                if (Position.Row == 4)
+                {
+                    Position left = new Position(Position.Row, Position.Column - 1);
+                    if (Board.ValidPosition(left) && EnemyExists(left) && Board.GetPieceByPosition(left) == match.VulnerableEnPassant)
+                    {
+                        possibleMov[left.Row + 1, left.Column] = true;
+                    }
+                    Position right = new Position(Position.Row, Position.Column + 1);
+                    if (Board.ValidPosition(right) && EnemyExists(right) && Board.GetPieceByPosition(right) == match.VulnerableEnPassant)
+                    {
+                        possibleMov[right.Row + 1, right.Column] = true;
+                    }
                 }
             }
 
