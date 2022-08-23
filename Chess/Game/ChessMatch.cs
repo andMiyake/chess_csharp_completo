@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Chessboard;
 using Chessboard.Enums;
 using Chessboard.Exceptions;
@@ -156,6 +157,22 @@ namespace Game
                 throw new BoardException("You can't put yourself in check!");
             }
 
+            Piece p = Board.GetPieceByPosition(destination);
+
+            // #specialmove Promotion
+            if (p is Pawn)
+            {
+                if ((p.Color == Color.White && destination.Row == 0) ||
+                    (p.Color == Color.Black && destination.Row == 7))
+                {
+                    p = Board.RemovePiece(destination);
+                    ownPiecesList.Remove(p);
+                    Piece queen = new Queen(Board, p.Color);
+                    Board.PutPiece(queen, destination);
+                    ownPiecesList.Add(queen);
+                }
+            }
+
             if (IsInCheck(GetOpponentColor(currentPlayer)))
             {
                 check = true;
@@ -174,8 +191,6 @@ namespace Game
                 turn++;
                 ChangePlayer();
             }
-
-            Piece p = Board.GetPieceByPosition(destination);
 
             // #specialmove En passant
             if (p is Pawn && (destination.Row == origin.Row - 2 || destination.Row == origin.Row + 2))
